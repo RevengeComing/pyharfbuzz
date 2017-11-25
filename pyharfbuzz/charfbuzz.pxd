@@ -32,3 +32,16 @@ cdef extern from "/usr/include/harfbuzz/hb-ft.h":
 		pass
 
 	hb_buffer_t* hb_buffer_create()
+	void hb_buffer_add_utf8(hb_buffer_t *buffer, const char *text,
+		int text_length, unsigned int item_offset, int item_length)
+	void hb_buffer_guess_segment_properties(hb_buffer_t *buffer);
+
+	ctypedef struct hb_feature_t:
+		pass
+
+	void hb_shape (hb_font_t *font,
+          hb_buffer_t *buffer,
+          const hb_feature_t *features,
+          unsigned int num_features);
+
+	unsigned int hb_buffer_get_length (hb_buffer_t *buffer);

@@ -1,1 +1,1 @@
-from .harfbuzz import FTFace, FTLibrary, HBFontT, HBBufferT
+from .harfbuzz import FTFace, FTLibrary, HBFontT, HBBufferT, hb_shape

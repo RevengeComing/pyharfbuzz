@@ -34,3 +34,30 @@ cdef class HBFontT:
 
 cdef class HBBufferT:
 	cdef charfbuzz.hb_buffer_t *hb_buffer_t
+	def __cinit__(self):
+		self.hb_buffer_create()
+
+	def hb_buffer_create(self):
+		self.hb_buffer_t = charfbuzz.hb_buffer_create()
+
+	def hb_buffer_add_utf8(self, text, text_length, item_offset, item_length):
+		if isinstance(text, str):
+			text = text.encode('utf-8')
+
+		cdef const char *ctext = text
+		cdef int ctext_length = text_length
+
+		charfbuzz.hb_buffer_add_utf8(self.hb_buffer_t, ctext,
+			ctext_length, item_offset, item_length)
+
+	def hb_buffer_guess_segment_properties(self):
+		charfbuzz.hb_buffer_guess_segment_properties(self.hb_buffer_t)
+
+	def get_length(self):
+		return charfbuzz.hb_buffer_get_length(self.hb_buffer_t)
+
+cdef class HBFeatureT:
+	cdef charfbuzz.hb_feature_t *hb_feature_t
+
+def hb_shape(HBFontT font, HBBufferT buffer, HBFeatureT feature, num_features):
+	charfbuzz.hb_shape(font.hb_font_t, buffer.hb_buffer_t, feature.hb_feature_t, num_features)
