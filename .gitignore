@@ -1,0 +1,9 @@
+build/
+dist/
+env/
+pyharfbuzz.egg-info/
+
+pyharfbuzz/harfbuzz.c
+
+*.so
+*.pyc
