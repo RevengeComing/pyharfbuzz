@@ -1,6 +1,8 @@
 # Python binding for Harfbuzz an OpenType text shaping engine.
 
-## Simply install it with pip
+
+## Installation
+First you need to install freetype2 and harfbuzz then install pyharfbuzz with pip:
 ```
 pip install pyharfbuzz
 ```
