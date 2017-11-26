@@ -1,9 +1,8 @@
 
-
-cdef extern from "/usr/include/harfbuzz/hb.h":
+cdef extern from "hb.h":
 	pass
 
-cdef extern from "/usr/include/harfbuzz/hb-ft.h":
+cdef extern from "hb-ft.h":
 	ctypedef signed long  FT_Long;
 	ctypedef signed long  FT_F26Dot6;
 	ctypedef unsigned int  FT_UInt;
@@ -26,7 +25,9 @@ cdef extern from "/usr/include/harfbuzz/hb-ft.h":
 	ctypedef struct hb_font_t:
 		pass
 
-	hb_font_t* hb_ft_font_create(FT_Face ft_face, None)
+	void (*hb_destroy_func_t) (void *user_data);
+
+	hb_font_t* hb_ft_font_create(FT_Face ft_face, void * destroy)
 
 	ctypedef struct hb_buffer_t:
 		pass
@@ -34,7 +35,7 @@ cdef extern from "/usr/include/harfbuzz/hb-ft.h":
 	hb_buffer_t* hb_buffer_create()
 	void hb_buffer_add_utf8(hb_buffer_t *buffer, const char *text,
 		int text_length, unsigned int item_offset, int item_length)
-	void hb_buffer_guess_segment_properties(hb_buffer_t *buffer);
+	void hb_buffer_guess_segment_properties(hb_buffer_t *buffer)
 
 	ctypedef struct hb_feature_t:
 		pass
@@ -42,6 +43,11 @@ cdef extern from "/usr/include/harfbuzz/hb-ft.h":
 	void hb_shape (hb_font_t *font,
           hb_buffer_t *buffer,
           const hb_feature_t *features,
-          unsigned int num_features);
+          unsigned int num_features)
 
-	unsigned int hb_buffer_get_length (hb_buffer_t *buffer);
+	unsigned int hb_buffer_get_length (hb_buffer_t *buffer)
+
+	ctypedef struct hb_glyph_info_t:
+		pass
+
+	hb_glyph_info_t * hb_buffer_get_glyph_infos (hb_buffer_t *buffer, unsigned int *length)

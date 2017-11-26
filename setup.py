@@ -1,13 +1,17 @@
 from sys import platform
 
-from setuptools import setup, Extension
+from distutils.core import Extension, setup
 
-libraries = ['freetype', 'harfbuzz']
+sources = ['pyharfbuzz/harfbuzz.c']
+libraries = ['harfbuzz', 'freetype']
 
 if platform == "linux" or platform == "linux2":
     include_dirs = ['/usr/include/harfbuzz/', '/usr/include/freetype2/']
+    library_dirs = ['/usr/include']
 elif platform == "darwin":
+    library_dirs = ['/usr/local/include']
     include_dirs = ['/usr/local/include/harfbuzz', '/usr/local/include/freetype2']
+
 
 setup(
     name='pyharfbuzz',
@@ -19,8 +23,9 @@ setup(
     packages=['pyharfbuzz'],
       ext_modules=[Extension(
             name='pyharfbuzz.harfbuzz',
-            sources=['pyharfbuzz/harfbuzz.c'],
+            sources=sources,
             libraries=libraries,
+            library_dirs=library_dirs,
             include_dirs=include_dirs)
     ],
     include_package_data=True

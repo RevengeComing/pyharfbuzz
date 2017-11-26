@@ -19,13 +19,14 @@ def main():
     # Create hb-buffer and populate.
     hb_buffer_t = HBBufferT()
     hb_buffer_t.hb_buffer_add_utf8(my_text, -1, 0, -1)
-    hb_buffer_t.hb_buffer_guess_segment_properties()
+    hb_buffer_t.guess_segment_properties()
 
     # Shape it! 
     hb_shape(hb_font, hb_buffer_t, None, 0)
 
     # Get glyph information and positions out of the buffer.
     my_text_len = hb_buffer_t.get_length()
+    glyph_info = hb_buffer_t.get_glyph_infos()
 
 if __name__ == '__main__':
     main()
