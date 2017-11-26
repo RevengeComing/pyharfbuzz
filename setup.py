@@ -1,6 +1,6 @@
 from sys import platform
 
-from distutils.core import Extension, setup
+from setuptools import Extension, setup
 
 sources = ['pyharfbuzz/harfbuzz.c']
 libraries = ['harfbuzz', 'freetype']
