@@ -20,6 +20,7 @@ setup(
     author='Sepehr Hamzehlouy',
     author_email='s.hamzelooy@gmail.com',
     license='MIT',
+    url='https://github.com/RevengeComing/pyharfbuzz',
     packages=['pyharfbuzz'],
       ext_modules=[Extension(
             name='pyharfbuzz.harfbuzz',
