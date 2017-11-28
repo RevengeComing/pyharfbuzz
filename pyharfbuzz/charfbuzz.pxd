@@ -37,6 +37,11 @@ cdef extern from "hb.h" :
     ctypedef unsigned long hb_codepoint_t
     ctypedef long hb_position_t
     ctypedef int hb_bool_t
+    ctypedef enum hb_direction_t:
+        HB_DIRECTION_LTR
+        HB_DIRECTION_RTL
+        HB_DIRECTION_TTB
+        HB_DIRECTION_BTT
 
     # hb-buffer.h
     ctypedef struct hb_buffer_t :
@@ -67,7 +72,9 @@ cdef extern from "hb.h" :
     hb_glyph_position_t * hb_buffer_get_glyph_positions(hb_buffer_t *buffer,
                                unsigned int *length);
     hb_glyph_info_t * hb_buffer_get_glyph_infos (hb_buffer_t *buffer, unsigned int *length)
-
+    hb_direction_t hb_buffer_get_direction (hb_buffer_t *buffer);
+    void hb_buffer_destroy (hb_buffer_t *buffer);
+    
     # hb-font.h
     ctypedef struct hb_font_t:
         pass
@@ -76,6 +83,7 @@ cdef extern from "hb.h" :
         pass
 
     hb_bool_t hb_font_get_glyph_name(hb_font_t *font, hb_codepoint_t glyph, char *name, unsigned int size)
+    void hb_font_destroy (hb_font_t *font)
 
     # hb-shape.h
     ctypedef struct hb_feature_t:

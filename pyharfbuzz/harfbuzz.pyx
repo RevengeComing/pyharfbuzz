@@ -7,6 +7,8 @@ __all__ = [
     'HBBufferT',
     'hb_shape',
     'get_glyph_name',
+    'hb_buffer_get_direction',
+    'is_horizontal',
 ]
     
 
@@ -40,6 +42,9 @@ cdef class HBFontT:
     cdef charfbuzz.hb_font_t *hb_font_t
     def hb_ft_font_create(self, FTFace ftf):
         self.hb_font_t = charfbuzz.hb_ft_font_create(ftf.ft_face, NULL)
+
+    def __dealloc__(self):
+        charfbuzz.hb_font_destroy(self.hb_font_t)
 
 
 cdef class HBBufferT:
@@ -77,6 +82,9 @@ cdef class HBBufferT:
         glyph_position.set_hb_glyph_positions(self.hb_buffer_t)
         return glyph_position
 
+    def __dealloc__(self):
+        charfbuzz.hb_buffer_destroy(self.hb_buffer_t)
+
 
 cdef class HBFeatureT:
     cdef charfbuzz.hb_feature_t *hb_feature_t
@@ -109,3 +117,11 @@ def get_glyph_name(HBFontT font, codepoint):
     cdef char glyph_name[32]
     charfbuzz.hb_font_get_glyph_name(font.hb_font_t, codepoint, glyph_name, sizeof(glyph_name))
     return glyph_name
+
+def hb_buffer_get_direction(HBBufferT buffer):
+    return charfbuzz.hb_buffer_get_direction(buffer.hb_buffer_t)
+
+def is_horizontal(dir_code):
+    if (dir_code == 4 or dir_code == 5):
+        return True
+    return False

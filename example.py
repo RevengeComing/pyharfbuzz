@@ -1,6 +1,7 @@
 import sys
 
-from pyharfbuzz import FTLibrary, FTFace, HBFontT, HBBufferT, hb_shape, get_glyph_name
+from pyharfbuzz import FTLibrary, FTFace, HBFontT, HBBufferT, hb_shape, get_glyph_name,\
+    hb_buffer_get_direction, is_horizontal
 
 
 def main(*args):
@@ -74,6 +75,8 @@ def main(*args):
 
         current_x += pos[i]['x_advance'] / 64
         current_y += pos[i]['y_advance'] / 64
+
+    print(is_horizontal(hb_buffer_get_direction(hb_buffer_t)))
 
 
 if __name__ == '__main__':
