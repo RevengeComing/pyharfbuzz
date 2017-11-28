@@ -9,6 +9,7 @@ __all__ = [
     'get_glyph_name',
     'hb_buffer_get_direction',
     'is_horizontal',
+    'is_ltr', 'is_rtl', 'is_ttb', 'is_btt'
 ]
     
 
@@ -120,6 +121,26 @@ def get_glyph_name(HBFontT font, codepoint):
 
 def hb_buffer_get_direction(HBBufferT buffer):
     return charfbuzz.hb_buffer_get_direction(buffer.hb_buffer_t)
+
+def is_ltr(HBBufferT buffer):
+    if hb_buffer_get_direction(buffer) == 4:
+        return True
+    return False
+
+def is_rtl(HBBufferT buffer):
+    if hb_buffer_get_direction(buffer) == 5:
+        return True
+    return False
+
+def is_ttb(HBBufferT buffer):
+    if hb_buffer_get_direction(buffer) == 6:
+        return True
+    return False
+
+def is_btt(HBBufferT buffer):
+    if hb_buffer_get_direction(buffer) == 7:
+        return True
+    return False
 
 def is_horizontal(dir_code):
     if (dir_code == 4 or dir_code == 5):
