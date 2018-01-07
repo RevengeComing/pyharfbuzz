@@ -1,4 +1,5 @@
 from . cimport charfbuzz
+from .glyph import glyph_table
 
 __all__ = [
     'FTLibrary',
@@ -6,10 +7,11 @@ __all__ = [
     'HBFontT',
     'HBBufferT',
     'hb_shape',
-    'get_glyph_name',
+    'get_glyph_name', 'glyph_to_string',
     'hb_buffer_get_direction',
     'is_horizontal',
-    'is_ltr', 'is_rtl', 'is_ttb', 'is_btt'
+    'is_ltr', 'is_rtl', 'is_ttb', 'is_btt',
+    'is_uni', 'get_char_by_glyph_name', 'shape',
 ]
     
 
@@ -83,6 +85,14 @@ cdef class HBBufferT:
         glyph_position.set_hb_glyph_positions(self.hb_buffer_t)
         return glyph_position
 
+    def get_settings(self):
+        cdef charfbuzz.hb_script_t script
+        cdef charfbuzz.hb_language_t lang
+
+        script = charfbuzz.hb_buffer_get_script(self.hb_buffer_t)
+        lang = charfbuzz.hb_buffer_get_language(self.hb_buffer_t)
+        return {'script' : script, 'language' : charfbuzz.hb_language_to_string(lang)}
+
     def __dealloc__(self):
         charfbuzz.hb_buffer_destroy(self.hb_buffer_t)
 
@@ -119,6 +129,11 @@ def get_glyph_name(HBFontT font, codepoint):
     charfbuzz.hb_font_get_glyph_name(font.hb_font_t, codepoint, glyph_name, sizeof(glyph_name))
     return glyph_name
 
+def glyph_to_string(HBFontT font, codepoint):
+    cdef char string[32]
+    charfbuzz.hb_font_get_glyph_name(font.hb_font_t, codepoint, string, sizeof(string))
+    return string
+
 def hb_buffer_get_direction(HBBufferT buffer):
     return charfbuzz.hb_buffer_get_direction(buffer.hb_buffer_t)
 
@@ -146,3 +161,59 @@ def is_horizontal(dir_code):
     if (dir_code == 4 or dir_code == 5):
         return True
     return False
+
+def is_uni(glyph_name):
+    if glyph_name in glyph_table:
+        return False
+    return True
+
+def get_char_by_glyph_name(glyph_name):
+    if is_uni(glyph_name):
+        return chr(int(glyph_name[3:], 16))
+    return glyph_table[glyph_name]
+
+def shape(font_file, string):
+    ft_library = FTLibrary()
+    ft_library.init()
+
+    ft_face = FTFace()
+    ft_face.init(ft_library, font_file)
+    ft_face.set_charsize(36*64)
+
+    hb_font = HBFontT()
+    hb_font.hb_ft_font_create(ft_face)
+
+    hb_buffer_t = HBBufferT()
+    hb_buffer_t.hb_buffer_add_utf8(string, -1, 0, -1)
+    hb_buffer_t.guess_segment_properties()
+
+    hb_shape(hb_font, hb_buffer_t, None, 0)
+
+    my_text_len = hb_buffer_t.get_length()
+    info = hb_buffer_t.get_glyph_infos()
+    pos = hb_buffer_t.get_glyph_position()
+
+    output = []
+
+    for i in range(my_text_len):
+        gid = info[i]['codepoint']
+        cluster = info[i]['cluster']
+        x_advance = pos[i]['x_advance'] / 64
+        y_advance = pos[i]['y_advance'] / 64
+        x_offset = pos[i]['x_offset'] / 64
+        y_offset = pos[i]['y_offset'] / 64
+
+        glyph_name = get_glyph_name(hb_font, gid)
+
+        output.append({
+            'cluster': cluster,
+            'char': get_char_by_glyph_name(glyph_name.decode()),
+            'glyph_name': glyph_name.decode(),
+            'x_advance': x_advance,
+            'y_advance': y_advance,
+            'x_offset': x_offset,
+            'y_offset': y_offset,
+        })
+
+    return output
+

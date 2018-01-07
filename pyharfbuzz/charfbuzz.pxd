@@ -32,6 +32,15 @@ cdef extern from "freetype/freetype.h" :
 
 
 cdef extern from "hb.h" :
+    # hb-unicode.h
+    ctypedef enum hb_script_t:
+        HB_SCRIPT_COMMON = 0
+    
+    # hb-language.h
+    ctypedef void *hb_language_t
+    hb_language_t hb_language_from_string(char *str)
+    char * hb_language_to_string(hb_language_t language)
+
     # hb-common.h
     ctypedef void (*hb_destroy_func_t) (void *user_data)
     ctypedef unsigned long hb_codepoint_t
@@ -72,8 +81,11 @@ cdef extern from "hb.h" :
     hb_glyph_position_t * hb_buffer_get_glyph_positions(hb_buffer_t *buffer,
                                unsigned int *length);
     hb_glyph_info_t * hb_buffer_get_glyph_infos (hb_buffer_t *buffer, unsigned int *length)
-    hb_direction_t hb_buffer_get_direction (hb_buffer_t *buffer);
-    void hb_buffer_destroy (hb_buffer_t *buffer);
+    hb_direction_t hb_buffer_get_direction (hb_buffer_t *buffer)
+    void hb_buffer_destroy (hb_buffer_t *buffer)
+
+    hb_language_t hb_buffer_get_language(hb_buffer_t *buffer)
+    hb_script_t hb_buffer_get_script(hb_buffer_t *buffer)
     
     # hb-font.h
     ctypedef struct hb_font_t:
@@ -83,6 +95,7 @@ cdef extern from "hb.h" :
         pass
 
     hb_bool_t hb_font_get_glyph_name(hb_font_t *font, hb_codepoint_t glyph, char *name, unsigned int size)
+    void hb_font_glyph_to_string (hb_font_t *font, hb_codepoint_t glyph, char *s, unsigned int size)
     void hb_font_destroy (hb_font_t *font)
 
     # hb-shape.h

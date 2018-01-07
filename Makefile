@@ -1,4 +1,8 @@
-.PHONY: compile clean
+.PHONY: compile clean run_tests
+
+
+run_tests:
+	python test/harfbuzz.py
 
 
 compile:
