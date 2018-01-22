@@ -12,3 +12,7 @@ compile:
 
 install: compile
 	python setup.py install
+
+
+upload:
+	python setup.py sdist upload -r pypi
