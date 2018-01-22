@@ -172,13 +172,13 @@ def get_char_by_glyph_name(glyph_name):
         return chr(int(glyph_name[3:], 16))
     return glyph_table[glyph_name]
 
-def shape(font_file, string):
+def shape(font_file, string, font_size=36):
     ft_library = FTLibrary()
     ft_library.init()
 
     ft_face = FTFace()
     ft_face.init(ft_library, font_file)
-    ft_face.set_charsize(36*64)
+    ft_face.set_charsize(font_size*64)
 
     hb_font = HBFontT()
     hb_font.hb_ft_font_create(ft_face)

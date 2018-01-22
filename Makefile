@@ -1,4 +1,4 @@
-.PHONY: compile clean run_tests
+.PHONY: compile clean run_tests upload
 
 
 run_tests:
