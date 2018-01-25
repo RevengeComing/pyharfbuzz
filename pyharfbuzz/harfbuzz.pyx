@@ -1,6 +1,8 @@
 from . cimport charfbuzz
 from .glyph import glyph_table
 
+from ._compat import prepare_string, chr
+
 __all__ = [
     'FTLibrary',
     'FTFace',
@@ -11,9 +13,9 @@ __all__ = [
     'hb_buffer_get_direction',
     'is_horizontal',
     'is_ltr', 'is_rtl', 'is_ttb', 'is_btt',
-    'is_uni', 'get_char_by_glyph_name', 'shape',
+    'is_uni', 'get_char_by_glyph_name',
+    'shape'
 ]
-    
 
 cdef class FTLibrary:
     cdef charfbuzz.FT_Library ft_library
@@ -27,8 +29,7 @@ cdef class FTFace:
     cdef charfbuzz.FT_Face ft_face
     cdef const char* cfont_name
     def init(self, FTLibrary ftl, font_name):
-        if isinstance(font_name, str):
-            font_name = font_name.encode('utf-8')
+        font_name = prepare_string(font_name)
         self.cfont_name = font_name
 
         error = charfbuzz.FT_New_Face(ftl.ft_library, self.cfont_name, 0, &self.ft_face)
@@ -60,8 +61,7 @@ cdef class HBBufferT:
         self.hb_buffer_t = charfbuzz.hb_buffer_create()
 
     def hb_buffer_add_utf8(self, text, text_length, item_offset, item_length):
-        if isinstance(text, str):
-            text = text.encode('utf-8')
+        text = prepare_string(text)
 
         cdef const char *ctext = text
         cdef int ctext_length = text_length
@@ -204,7 +204,6 @@ def shape(font_file, string, font_size=36):
         y_offset = pos[i]['y_offset'] / 64
 
         glyph_name = get_glyph_name(hb_font, gid)
-
         output.append({
             'cluster': cluster,
             'char': get_char_by_glyph_name(glyph_name.decode()),
