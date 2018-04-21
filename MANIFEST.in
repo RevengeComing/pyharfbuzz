@@ -1,6 +1,3 @@
-recursive-include freetype2/include *
-recursive-include freetype2/src *
-recursive-include harfbuzz/src *
 setup.py
 pyharfbuzz/__init__.py
 pyharfbuzz/harfbuzz.c

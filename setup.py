@@ -4,12 +4,17 @@ from setuptools import Extension, setup
 
 sources = ['pyharfbuzz/harfbuzz.c']
 libraries = ['harfbuzz', 'freetype']
-library_dirs = ['freetype2/src', 'harfbuzz/src']
-include_dirs = ['harfbuzz/src', 'freetype2/include']
+
+if platform.startswith("linux"):
+    include_dirs = ['/usr/include/harfbuzz/', '/usr/include/freetype2/']
+    library_dirs = ['/usr/include']
+elif platform == "darwin":
+    library_dirs = ['/usr/local/include']
+    include_dirs = ['/usr/local/include/harfbuzz', '/usr/local/include/freetype2']
 
 setup(
     name='pyharfbuzz',
-    version='0.2.0',
+    version='0.2.1',
     description='Python binding for harfbuzz an OpenType text shaping.',
     author='Sepehr Hamzehlouy',
     author_email='s.hamzelooy@gmail.com',
@@ -21,7 +26,8 @@ setup(
         sources=sources,
         libraries=libraries,
         library_dirs=library_dirs,
-        include_dirs=include_dirs)
+        include_dirs=include_dirs
+        )
     ],
     include_package_data=True
 )

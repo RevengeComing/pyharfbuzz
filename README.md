@@ -7,6 +7,7 @@ pip install pyharfbuzz
 ```
 
 Freetype and Harfbuzz is embedded inside pypi package so you dont need to install them on your machine.
+
 -------------------
 
 It is working on Ubuntu(Py23) and Mac(Py3).
