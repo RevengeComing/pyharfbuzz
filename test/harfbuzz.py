@@ -8,7 +8,6 @@ from pyharfbuzz import *
 class TestHarfbuzz(unittest.TestCase):
     font_name = 'Vazir.ttf'
     unshaped = "یک نوشته ی تستی"
-    shaped = "ﯽﺘﺴﺗ ی ﻪﺘﺷﻮﻧ ﮏﯾ"
 
     dir_rtl = "تست rtl تست"
     dir_ltr = "ltr تست ltr"
@@ -19,11 +18,6 @@ class TestHarfbuzz(unittest.TestCase):
 
         ft_face = FTFace()
         ft_face.init(ft_library, self.font_name)
-
-    def test_shape(self):
-        out_put = shape(self.font_name, self.unshaped)
-        shaped = ''.join([c['char'] for c in out_put])
-        self.assertEqual(self.shaped, shaped)
 
     def test_buffer(self):
         hb_buffer = HBBufferT()

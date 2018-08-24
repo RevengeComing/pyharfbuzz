@@ -14,7 +14,7 @@ elif platform == "darwin":
 
 setup(
     name='pyharfbuzz',
-    version='0.2.1',
+    version='0.2.2',
     description='Python binding for harfbuzz an OpenType text shaping.',
     author='Sepehr Hamzehlouy',
     author_email='s.hamzelooy@gmail.com',

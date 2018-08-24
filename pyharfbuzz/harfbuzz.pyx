@@ -1,7 +1,6 @@
 from . cimport charfbuzz
-from .glyph import glyph_table
 
-from ._compat import prepare_string, chr
+from ._compat import prepare_string
 
 __all__ = [
     'FTLibrary',
@@ -13,7 +12,6 @@ __all__ = [
     'hb_buffer_get_direction',
     'is_horizontal',
     'is_ltr', 'is_rtl', 'is_ttb', 'is_btt',
-    'is_uni', 'get_char_by_glyph_name',
     'shape'
 ]
 
@@ -162,16 +160,6 @@ def is_horizontal(dir_code):
         return True
     return False
 
-def is_uni(glyph_name):
-    if glyph_name in glyph_table:
-        return False
-    return True
-
-def get_char_by_glyph_name(glyph_name):
-    if is_uni(glyph_name):
-        return chr(int(glyph_name[3:], 16))
-    return glyph_table[glyph_name]
-
 def shape(font_file, string, font_size=36):
     ft_library = FTLibrary()
     ft_library.init()
@@ -206,7 +194,6 @@ def shape(font_file, string, font_size=36):
         glyph_name = get_glyph_name(hb_font, gid)
         output.append({
             'cluster': cluster,
-            'char': get_char_by_glyph_name(glyph_name.decode()),
             'glyph_name': glyph_name.decode(),
             'x_advance': x_advance,
             'y_advance': y_advance,

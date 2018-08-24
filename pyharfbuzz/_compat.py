@@ -9,9 +9,6 @@ py_2 = False
 if sys.version_info[0] == 2:
     py_2 = True
 
-if py_2:
-    chr = unichr
-
 def convert(the_string):
     return the_string.encode('utf8')
 
