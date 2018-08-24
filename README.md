@@ -2,25 +2,13 @@
 
 
 ## Installation
+First you need to install freetype2 and harfbuzz. then You can install pyharfbuzz using pip:
 ```
 pip install pyharfbuzz
 ```
 
-Freetype and Harfbuzz is embedded inside pypi package so you dont need to install them on your machine.
-
--------------------
-
-It is working on Ubuntu(Py23) and Mac(Py3).
-Windows support amd Mac(Py2) is on progress.
-
--------------------
-
-At this moment its width calculation is being used inside [kivy-i18n](https://github.com/RevengeComing/kivy-i18n)
-
--------------------
-
-Use shape function to shape a text:
-
+## Usage
+Use shape function to shape your text text:
 ```
 from pyharfbuzz import shape
 
@@ -28,3 +16,5 @@ your_shaped_text_info = shape('Vazir.ttf', 'your text')
 ```
 
 To use lower level APIs see example.py.
+
+Open an issue if you need any harfbuzz API that pyharfbuzz doesn't support.
